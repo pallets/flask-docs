@@ -1,0 +1,153 @@
+import os
+import json
+import shutil
+import tempfile
+import subprocess
+
+import click
+
+
+HERE = os.path.abspath(os.path.dirname(__file__))
+
+config_override_template = '''\
+import os
+import sys
+
+sys.path.insert(0, %(theme_path)r)
+__import__('flask_theme_support')
+
+_here = os.getcwd()
+_real_path = %(real_path)r
+os.chdir(_real_path)
+execfile('conf.py')
+os.chdir(_here)
+html_static_path = [os.path.join(_real_path, _x) for _x in html_static_path]
+
+
+html_favicon = None
+project = u'Flask'
+copyright = u'2014, Armin Ronacher'
+version = %(version)r
+
+html_theme = 'flask'
+html_theme_options = {}
+html_theme_path = [%(theme_path)r]
+html_sidebars = {
+    'index':    ['sidebarintro.html', 'sidebarversions.html', 'searchbox.html'],
+    '**':       ['sidebarlogo.html', 'localtoc.html', 'sidebarversions.html',
+                 'relations.html', 'searchbox.html']
+}
+html_context = %(context_vars)r
+
+pygments_style = 'flask_theme_support.FlaskyStyle'
+'''
+
+
+def build_context_vars(this_version, config):
+    versions = []
+    warning = None
+
+    for version in config['versions']:
+        is_current = this_version == version['slug']
+        versions.append({
+            'slug': version['slug'],
+            'title': version['title'],
+            'note': version.get('note'),
+            'is_current': is_current,
+        })
+        if is_current:
+            warning = version.get('warning')
+
+    return {
+        'flask_versions': versions,
+        'flask_version_warning': warning,
+    }
+
+
+def ensure_checkout(checkout_folder, repo_url):
+    try:
+        os.makedirs(checkout_folder)
+    except OSError:
+        pass
+
+    url, branch = repo_url.rsplit('@', 1)
+    if os.path.isdir(os.path.join(checkout_folder, '.git')):
+        subprocess.Popen([
+            'git', 'fetch', 'origin',
+            '%s:%s' % (branch, branch),
+            '--update-head-ok',
+            '--depth', '1',
+        ], cwd=checkout_folder).wait()
+        subprocess.Popen([
+            'git', 'reset', '--hard',
+        ], cwd=checkout_folder).wait()
+        subprocess.Popen([
+            'git', 'checkout', branch,
+        ], cwd=checkout_folder).wait()
+    else:
+        subprocess.Popen([
+            'git', 'clone',
+            '--depth', '1',
+            '--branch', branch,
+            url,
+            checkout_folder
+        ]).wait()
+
+
+def build_version(config, version_config, output_folder, checkout_folder):
+    version_checkout_folder = os.path.join(
+        checkout_folder, str(version_config['slug']))
+
+    ensure_checkout(version_checkout_folder, version_config['repo'])
+    doc_source_path = os.path.join(version_checkout_folder,
+                                   str(config['doc_path']))
+
+    config_path = tempfile.mkdtemp(prefix='.versionoverlay',
+                                   dir=HERE)
+    try:
+        with open(os.path.join(config_path, 'conf.py'), 'w') as f:
+            f.write(config_override_template % {
+                'version': version_config['version'],
+                'real_path': os.path.abspath(doc_source_path),
+                'theme_path': os.path.join(HERE, 'themes'),
+                'context_vars': build_context_vars(version_config['slug'],
+                                                   config),
+            } + '\n')
+
+        subprocess.Popen([
+            'sphinx-build',
+            '-d', os.path.join(doc_source_path, '.doctrees'),
+            '-b', 'dirhtml',
+            '-c', config_path,
+            '.',
+            os.path.abspath(output_folder),
+        ], cwd=doc_source_path).wait()
+    finally:
+        try:
+            shutil.rmtree(config_path)
+        except (OSError, IOError):
+            pass
+
+
+@click.group()
+def cli():
+    """A wrapper around sphinx-build."""
+
+
+@cli.command()
+@click.option('--config', type=click.Path(),
+              default='docconfig.json',
+              help='The path to the documentation config file.')
+@click.option('--checkout-folder', type=click.Path(),
+              default='checkouts')
+@click.option('--output', '-O', type=click.Path(), default='build',
+              help='The path to the output folder.')
+def build(config, checkout_folder, output):
+    """Builds all documentation."""
+    with open(config) as f:
+        cfg = json.load(f)
+
+    for version_cfg in cfg['versions']:
+        build_version(cfg, version_cfg,
+                      os.path.join(output, str(version_cfg['slug'])),
+                      checkout_folder)

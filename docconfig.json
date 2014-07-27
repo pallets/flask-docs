@@ -1,0 +1,27 @@
+{
+  "doc_path": "./docs",
+  "versions": [
+    {
+      "slug": "dev",
+      "title": "Development",
+      "note": "unstable",
+      "version": "1.0-dev",
+      "repo": "https://github.com/mitsuhiko/flask@master",
+      "warning": "This is the documentation for the development version of Flask"
+    },
+    {
+      "slug": "0.10",
+      "title": "Flask 0.10.x",
+      "note": "stable",
+      "version": "0.10.1",
+      "repo": "https://github.com/mitsuhiko/flask@0.10.1"
+    },
+    {
+      "slug": "0.9",
+      "title": "Flask 0.9.x",
+      "note": null,
+      "version": "0.9",
+      "repo": "https://github.com/mitsuhiko/flask@0.9"
+    }
+  ]
+}
