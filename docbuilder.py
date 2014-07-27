@@ -59,8 +59,8 @@ def build_context_vars(this_version, config):
             warning = version.get('warning')
 
     return {
-        'flask_versions': versions,
-        'flask_version_warning': warning,
+        'documentation_versions': versions,
+        'documentation_version_warning': warning,
     }
 
 

@@ -1,13 +1,21 @@
 {%- extends "basic/layout.html" %}
 {%- block extrahead %}
   {{ super() }}
+  {% if pagename.endswith('/index') %}
+    {% set href = pagename[:-5] %}
+  {% elif pagename == 'index' %}
+    {% set href = '' %}
+  {% else %}
+    {% set href = pagename + '/' %}
+  {% endif %}
+  <link rel="canonical" href="{{ pathto(master_doc).rstrip('#/') or '.' }}/../latest/{{ href }}">
   <link media="only screen and (max-device-width: 480px)" href="{{
     pathto('_static/small_flask.css', 1) }}" type= "text/css" rel="stylesheet" />
 {% endblock %}
 {%- block relbar2 %}{% endblock %}
 {%- block document %}
-  {% if flask_version_warning %}
-    <p class=version-warning><strong>Warning:</strong> {{ flask_version_warning }}</p>
+  {% if documentation_version_warning %}
+    <p class=version-warning><strong>Warning:</strong> {{ documentation_version_warning }}</p>
   {% endif %}
   {{ super() }}
 {% endblock %}
