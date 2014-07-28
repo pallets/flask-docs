@@ -3,3 +3,12 @@ Flask Documentation
 
 This repository contains sphinx styles for Flask and Flask related
 projects and a wrapper script to build the online documentation.
+
+How to build the docs:
+
+  $ pip install --editable .
+  $ flask-docbuilder build --config configs/flask.json
+  $ flask-docbuilder build --config configs/werkzeug.json
+
+I was lazy so currently this only works if the package is editable
+installed.  The script will *not* work if properly installed.
