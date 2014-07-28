@@ -29,15 +29,12 @@ project = u'Flask'
 copyright = u'2014, Armin Ronacher'
 version = %(version)r
 
+templates_path = [%(templates_path)r]
 html_title = '%%s Documentation (%%s)' %% (project, version)
-html_theme = 'pocoo'
+html_theme = %(theme)r
 html_theme_options = {}
 html_theme_path = [%(theme_path)r]
-html_sidebars = {
-    'index':    ['sidebarintro.html', 'sidebarversions.html', 'searchbox.html'],
-    '**':       ['sidebarlogo.html', 'localtoc.html', 'sidebarversions.html',
-                 'relations.html', 'searchbox.html']
-}
+html_sidebars = %(sidebars)r
 html_context = %(context_vars)r
 
 pygments_style = 'pocoo_theme_support.PocooStyle'
@@ -97,7 +94,8 @@ def ensure_checkout(checkout_folder, repo_url):
 
 def build_version(config, version_config, output_folder, checkout_folder):
     version_checkout_folder = os.path.join(
-        checkout_folder, str(version_config['slug']))
+        checkout_folder, str('%s-%s' % (config['id'],
+                                        version_config['slug'])))
 
     ensure_checkout(version_checkout_folder, version_config['repo'])
     doc_source_path = os.path.join(version_checkout_folder,
@@ -105,6 +103,8 @@ def build_version(config, version_config, output_folder, checkout_folder):
 
     config_path = tempfile.mkdtemp(prefix='.versionoverlay',
                                    dir=HERE)
+    context_vars = build_context_vars(version_config['slug'], config)
+
     try:
         with open(os.path.join(config_path, 'conf.py'), 'w') as f:
             f.write(config_override_template % {
@@ -112,18 +112,22 @@ def build_version(config, version_config, output_folder, checkout_folder):
                 'release': version_config['version'],
                 'real_path': os.path.abspath(doc_source_path),
                 'theme_path': os.path.join(HERE, 'themes'),
-                'context_vars': build_context_vars(version_config['slug'],
-                                                   config),
+                'templates_path': os.path.join(
+                    HERE, str(config['templates_path'])),
+                'theme': config.get('theme') or 'pocoo',
+                'sidebars': config.get('sidebars') or {},
+                'context_vars': context_vars,
             } + '\n')
 
-        subprocess.Popen([
-            'sphinx-build',
-            '-d', os.path.join(doc_source_path, '.doctrees'),
-            '-b', 'dirhtml',
-            '-c', config_path,
-            '.',
-            os.path.abspath(output_folder),
-        ], cwd=doc_source_path).wait()
+        for builder in'dirhtml', 'json':
+            subprocess.Popen([
+                'sphinx-build',
+                '-d', os.path.join(doc_source_path, '.doctrees'),
+                '-b', builder,
+                '-c', config_path,
+                '.',
+                os.path.abspath(output_folder),
+            ], cwd=doc_source_path).wait()
     finally:
         try:
             shutil.rmtree(config_path)
@@ -137,17 +141,19 @@ def cli():
 
 
 @cli.command()
-@click.option('--config', type=click.Path(),
-              default='docconfig.json',
+@click.option('--config', type=click.Path(), required=True,
               help='The path to the documentation config file.')
 @click.option('--checkout-folder', type=click.Path(),
               default='checkouts')
-@click.option('--output', '-O', type=click.Path(), default='build',
+@click.option('--output', '-O', type=click.Path(), default=None,
               help='The path to the output folder.')
 def build(config, checkout_folder, output):
     """Builds all documentation."""
     with open(config) as f:
         cfg = json.load(f)
+
+    if output is None:
+        output = 'build/%s' % str(cfg['id'])
 
     for version_cfg in cfg['versions']:
         build_version(cfg, version_cfg,

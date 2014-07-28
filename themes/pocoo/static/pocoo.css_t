@@ -6,7 +6,7 @@
 /* -- page layout ----------------------------------------------------------- */
  
 body {
-    font-family: 'Georgia', serif;
+    font-family: sans-serif;
     font-size: 17px;
     background-color: white;
     color: #000;
@@ -38,13 +38,7 @@ hr {
  
 div.body {
     background-color: #ffffff;
-    color: #3E4349;
     padding: 0 30px 0 30px;
-}
-
-img.floatingflask {
-    padding: 0 0 10px 10px;
-    float: right;
 }
  
 div.footer {
@@ -90,7 +84,6 @@ div.sphinxsidebarwrapper p.logo {
  
 div.sphinxsidebar h3,
 div.sphinxsidebar h4 {
-    font-family: 'Garamond', 'Georgia', serif;
     color: #444;
     font-size: 24px;
     font-weight: normal;
@@ -126,7 +119,6 @@ div.sphinxsidebar ul {
  
 div.sphinxsidebar input {
     border: 1px solid #ccc;
-    font-family: 'Georgia', serif;
     font-size: 1em;
 }
 
@@ -159,7 +151,7 @@ p.version-warning {
     color: white;
     text-align: center;
 
-    background: #004B6B;
+    background: #d40;
     background-size: 28px 28px;
     background-image: linear-gradient(-45deg,
         rgba(255, 255, 255, 0.2) 0%,
@@ -174,16 +166,8 @@ p.version-warning {
 }
  
 /* -- body styles ----------------------------------------------------------- */
- 
-a {
-    color: #004B6B;
-    text-decoration: underline;
-}
- 
-a:hover {
-    color: #6D4100;
-    text-decoration: underline;
-}
+
+a { text-decoration: underline; }
  
 div.body h1,
 div.body h2,
@@ -191,7 +175,6 @@ div.body h3,
 div.body h4,
 div.body h5,
 div.body h6 {
-    font-family: 'Garamond', 'Georgia', serif;
     font-weight: normal;
     margin: 30px 0px 10px 0px;
     padding: 0;
@@ -237,7 +220,6 @@ dd div.admonition {
 }
 
 div.admonition p.admonition-title {
-    font-family: 'Garamond', 'Georgia', serif;
     font-weight: normal;
     font-size: 24px;
     margin: 0 0 10px 0;
@@ -399,22 +381,12 @@ tt.xref, a tt {
 
 a.reference {
     text-decoration: none;
-    border-bottom: 1px dotted #004B6B;
-}
-
-a.reference:hover {
-    border-bottom: 1px solid #6D4100;
 }
 
 a.footnote-reference {
     text-decoration: none;
     font-size: 0.7em;
     vertical-align: top;
-    border-bottom: 1px dotted #004B6B;
-}
-
-a.footnote-reference:hover {
-    border-bottom: 1px solid #6D4100;
 }
 
 a:hover tt {

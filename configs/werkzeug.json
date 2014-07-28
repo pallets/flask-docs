@@ -1,0 +1,29 @@
+{
+  "id": "werkzeug",
+  "doc_path": "./docs",
+  "templates_path": "templates/werkzeug",
+  "sidebars": {
+    "index": ["sidebarlogo.html", "sidebarintro.html", "sidebarversions.html",
+              "searchbox.html"],
+    "**": ["sidebarlogo.html", "localtoc.html", "sidebarversions.html",
+           "relations.html", "searchbox.html"]
+  },
+  "theme": "werkzeug",
+  "versions": [
+    {
+      "slug": "dev",
+      "title": "Development",
+      "note": "unstable",
+      "version": "0.10-dev",
+      "repo": "https://github.com/mitsuhiko/werkzeug@master",
+      "warning": "This is the documentation for the development version of Werkzeug"
+    },
+    {
+      "slug": "0.9",
+      "title": "Werkzeug 0.9.x",
+      "note": "stable",
+      "version": "0.9.6",
+      "repo": "https://github.com/mitsuhiko/werkzeug@0.9.6"
+    }
+  ]
+}
