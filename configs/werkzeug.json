@@ -1,7 +1,6 @@
 {
   "id": "werkzeug",
   "doc_path": "./docs",
-  "templates_path": "templates/werkzeug",
   "sidebars": {
     "index": ["sidebarlogo.html", "sidebarintro.html", "sidebarversions.html",
               "searchbox.html"],

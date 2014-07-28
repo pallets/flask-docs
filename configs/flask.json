@@ -1,7 +1,6 @@
 {
   "id": "flask",
   "doc_path": "./docs",
-  "templates_path": "templates/flask",
   "sidebars": {
     "index": ["sidebarintro.html", "sidebarversions.html", "searchbox.html"],
     "**": ["sidebarlogo.html", "localtoc.html", "sidebarversions.html",

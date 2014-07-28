@@ -29,7 +29,7 @@ project = u'Flask'
 copyright = u'2014, Armin Ronacher'
 version = %(version)r
 
-templates_path = [%(templates_path)r]
+templates_path = []
 html_title = '%%s Documentation (%%s)' %% (project, version)
 html_theme = %(theme)r
 html_theme_options = {}
@@ -112,8 +112,6 @@ def build_version(config, version_config, output_folder, checkout_folder):
                 'release': version_config['version'],
                 'real_path': os.path.abspath(doc_source_path),
                 'theme_path': os.path.join(HERE, 'themes'),
-                'templates_path': os.path.join(
-                    HERE, str(config['templates_path'])),
                 'theme': config.get('theme') or 'pocoo',
                 'sidebars': config.get('sidebars') or {},
                 'context_vars': context_vars,
