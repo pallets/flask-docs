@@ -14,19 +14,24 @@ import os
 import sys
 
 sys.path.insert(0, %(theme_path)r)
-__import__('pocoo_theme_support')
+#__import__('pocoo_theme_support')
+sys.path[:] = [os.path.abspath(x) for x in sys.path]
 
+# Source the old file and ensure the paths are setup correctly afterwards
+_old_file = __file__
+__file__ = 'conf.py'
 _here = os.getcwd()
 _real_path = %(real_path)r
 os.chdir(_real_path)
 execfile('conf.py')
+sys.path[:] = [os.path.abspath(x) for x in sys.path]
 os.chdir(_here)
 html_static_path = [os.path.join(_real_path, _x) for _x in html_static_path]
+__file__ = _old_file
 
-
+# Overrides
 html_favicon = None
-project = u'Flask'
-copyright = u'2014, Armin Ronacher'
+project = %(project)r
 version = %(version)r
 
 templates_path = []
@@ -37,7 +42,7 @@ html_theme_path = [%(theme_path)r]
 html_sidebars = %(sidebars)r
 html_context = %(context_vars)r
 
-pygments_style = 'pocoo_theme_support.PocooStyle'
+pygments_style = %(pygments_style)r
 '''
 
 
@@ -108,14 +113,22 @@ def build_version(config, version_config, output_folder, checkout_folder):
     try:
         with open(os.path.join(config_path, 'conf.py'), 'w') as f:
             f.write(config_override_template % {
+                'project': config['name'],
                 'version': '.'.join(version_config['version'].split('.')[:2]),
                 'release': version_config['version'],
                 'real_path': os.path.abspath(doc_source_path),
                 'theme_path': os.path.join(HERE, 'themes'),
                 'theme': config.get('theme') or 'pocoo',
+                'pygments_style': config.get('pygments_style')
+                    or 'pocoo_theme_support.PocooStyle',
                 'sidebars': config.get('sidebars') or {},
                 'context_vars': context_vars,
             } + '\n')
+
+        # Make sure the checkout is added to the pythonpath before Sphinx
+        # invokes as Sphinx itself depends on Jinja2 for instance.
+        env = dict(os.environ)
+        env['PYTHONPATH'] = os.path.abspath(version_checkout_folder)
 
         for builder in'dirhtml', 'json':
             subprocess.Popen([
@@ -125,7 +138,7 @@ def build_version(config, version_config, output_folder, checkout_folder):
                 '-c', config_path,
                 '.',
                 os.path.abspath(output_folder),
-            ], cwd=doc_source_path).wait()
+            ], cwd=doc_source_path, env=env).wait()
     finally:
         try:
             shutil.rmtree(config_path)

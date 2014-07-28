@@ -1,0 +1,23 @@
+{
+  "id": "jinja",
+  "name": "Jinja2",
+  "doc_path": "./docs",
+  "pygments_style": "jinja_theme_support.JinjaStyle",
+  "sidebars": {
+    "index": ["sidebarlogo.html", "sidebarintro.html", "sidebarversions.html",
+              "searchbox.html"],
+    "**": ["sidebarlogo.html", "localtoc.html", "sidebarversions.html",
+           "relations.html", "searchbox.html"]
+  },
+  "theme": "jinja",
+  "versions": [
+    {
+      "slug": "dev",
+      "title": "Development",
+      "note": "unstable",
+      "version": "2.8-dev",
+      "repo": "https://github.com/mitsuhiko/jinja2@master",
+      "warning": "This is the documentation for the development version of Jinja2"
+    }
+  ]
+}
