@@ -1,0 +1,5 @@
+Flask Documentation
+===================
+
+This repository contains sphinx styles for Flask and Flask related
+projects and a wrapper script to build the online documentation.

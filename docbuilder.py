@@ -14,7 +14,7 @@ import os
 import sys
 
 sys.path.insert(0, %(theme_path)r)
-__import__('flask_theme_support')
+__import__('pocoo_theme_support')
 
 _here = os.getcwd()
 _real_path = %(real_path)r
@@ -29,7 +29,8 @@ project = u'Flask'
 copyright = u'2014, Armin Ronacher'
 version = %(version)r
 
-html_theme = 'flask'
+html_title = '%%s Documentation (%%s)' %% (project, version)
+html_theme = 'pocoo'
 html_theme_options = {}
 html_theme_path = [%(theme_path)r]
 html_sidebars = {
@@ -39,7 +40,7 @@ html_sidebars = {
 }
 html_context = %(context_vars)r
 
-pygments_style = 'flask_theme_support.FlaskyStyle'
+pygments_style = 'pocoo_theme_support.PocooStyle'
 '''
 
 
@@ -107,7 +108,8 @@ def build_version(config, version_config, output_folder, checkout_folder):
     try:
         with open(os.path.join(config_path, 'conf.py'), 'w') as f:
             f.write(config_override_template % {
-                'version': version_config['version'],
+                'version': '.'.join(version_config['version'].split('.')[:2]),
+                'release': version_config['version'],
                 'real_path': os.path.abspath(doc_source_path),
                 'theme_path': os.path.join(HERE, 'themes'),
                 'context_vars': build_context_vars(version_config['slug'],

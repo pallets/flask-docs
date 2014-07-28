@@ -1,11 +1,3 @@
-/*
- * small_flask.css_t
- * ~~~~~~~~~~~~~~~~~
- *
- * :copyright: Copyright 2010 by Armin Ronacher.
- * :license: Flask Design License, see LICENSE for details.
- */
-
 body {
     margin: 0;
     padding: 20px 30px;
@@ -37,6 +29,12 @@ div.sphinxsidebar a {
 
 div.sphinxsidebar p.logo {
     display: none;
+}
+
+div.sphinxsidebar ul.versions a.current {
+    font-style: italic;
+    border-bottom: 1px solid white;
+    color: white;
 }
 
 div.document {
