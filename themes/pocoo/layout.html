@@ -13,6 +13,12 @@
     pathto('_static/small.css', 1) }}" type= "text/css" rel="stylesheet" />
 {% endblock %}
 {%- block relbar2 %}{% endblock %}
+{% block header %}
+  {{ super() }}
+  {% if pagename == 'index' %}
+  <div class=indexwrapper>
+  {% endif %}
+{% endblock %}
 {%- block document %}
   {% if documentation_version_warning %}
     <p class=version-warning><strong>Warning:</strong> {{ documentation_version_warning }}</p>
@@ -24,4 +30,7 @@
       &copy; Copyright {{ copyright }}.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
     </div>
+  {% if pagename == 'index' %}
+  </div>
+  {% endif %}
 {%- endblock %}

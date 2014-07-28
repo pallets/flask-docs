@@ -1,0 +1,23 @@
+{
+  "id": "click",
+  "name": "Click",
+  "doc_path": "./docs",
+  "pygments_style": "tango",
+  "sidebars": {
+    "index": ["sidebarintro.html", "sidebarversions.html",
+              "searchbox.html"],
+    "**": ["sidebarlogo.html", "localtoc.html", "sidebarversions.html",
+           "relations.html", "searchbox.html"]
+  },
+  "theme": "click",
+  "versions": [
+    {
+      "slug": "dev",
+      "title": "Development",
+      "note": "unstable",
+      "version": "3.0-dev",
+      "repo": "https://github.com/mitsuhiko/click@master",
+      "warning": "This is the documentation for the development version of Click"
+    }
+  ]
+}
