@@ -8,9 +8,11 @@
            "relations.html", "searchbox.html"]
   },
   "theme": "flask",
+  "theme_path": "../themes",
   "versions": [
     {
       "slug": "dev",
+      "type": "unstable",
       "title": "Development",
       "note": "unstable",
       "version": "1.0-dev",
@@ -19,6 +21,7 @@
     },
     {
       "slug": "0.10",
+      "type": "stable",
       "title": "Flask 0.10.x",
       "note": "stable",
       "version": "0.10.1",

@@ -9,9 +9,11 @@
            "relations.html", "searchbox.html"]
   },
   "theme": "werkzeug",
+  "theme_path": "../themes",
   "versions": [
     {
       "slug": "dev",
+      "type": "unstable",
       "title": "Development",
       "note": "unstable",
       "version": "0.10-dev",
@@ -20,6 +22,7 @@
     },
     {
       "slug": "0.9",
+      "type": "stable",
       "title": "Werkzeug 0.9.x",
       "note": "stable",
       "version": "0.9.6",

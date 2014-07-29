@@ -10,9 +10,11 @@
            "relations.html", "searchbox.html"]
   },
   "theme": "click",
+  "theme_path": "../themes",
   "versions": [
     {
       "slug": "dev",
+      "type": "unstable",
       "title": "Development",
       "note": "unstable",
       "version": "3.0-dev",
@@ -21,6 +23,7 @@
     },
     {
       "slug": "2",
+      "type": "stable",
       "title": "Click 2.x",
       "note": "stable",
       "version": "2.5",

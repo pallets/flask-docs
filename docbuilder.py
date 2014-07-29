@@ -1,4 +1,5 @@
 import os
+import re
 import json
 import shutil
 import tempfile
@@ -6,8 +7,6 @@ import subprocess
 
 import click
 
-
-HERE = os.path.abspath(os.path.dirname(__file__))
 
 config_override_template = '''\
 import os
@@ -46,6 +45,25 @@ html_sidebars = %(sidebars)r
 html_context = %(context_vars)r
 
 pygments_style = %(pygments_style)r
+'''
+
+nginx_template = '''\
+location %(doc_url)s {
+  alias %(doc_path)s;
+
+  rewrite ^%(doc_url_escaped)s/?$ $(doc_url)s/latest/ redirect;
+
+  set $doc_path _;
+  if ($request_uri ~* "^%(doc_url_escaped)s/latest(|/[^?]*?)$") {
+    set $doc_path $1;
+  }
+  if (-f /srv/websites/flask.pocoo.org/docs/0.10$doc_path/index.html) {
+    return 302 /docs/0.10$doc_path;
+  }
+  if (-f /srv/websites/flask.pocoo.org/docs/dev$doc_path/index.html) {
+    return 302 /docs/dev$doc_path;
+  }
+}
 '''
 
 
@@ -109,8 +127,7 @@ def build_version(config, version_config, output_folder, checkout_folder):
     doc_source_path = os.path.join(version_checkout_folder,
                                    str(config['doc_path']))
 
-    config_path = tempfile.mkdtemp(prefix='.versionoverlay',
-                                   dir=HERE)
+    config_path = tempfile.mkdtemp(prefix='.versionoverlay')
     context_vars = build_context_vars(version_config['slug'], config)
 
     try:
@@ -120,7 +137,7 @@ def build_version(config, version_config, output_folder, checkout_folder):
                 'version': '.'.join(version_config['version'].split('.')[:2]),
                 'release': version_config['version'],
                 'real_path': os.path.abspath(doc_source_path),
-                'theme_path': os.path.join(HERE, 'themes'),
+                'theme_path': config['theme_path'],
                 'theme': config.get('theme') or 'pocoo',
                 'pygments_style': config.get('pygments_style')
                     or 'pocoo_theme_support.PocooStyle',
@@ -149,6 +166,18 @@ def build_version(config, version_config, output_folder, checkout_folder):
             pass
 
 
+def load_config(ctx, param, filename):
+    try:
+        with open(filename) as f:
+            cfg = json.load(f)
+    except IOError as e:
+        raise click.BadParameter('Could not load config: %s' % e)
+    cfg['base_path'] = os.path.abspath(os.path.dirname(filename))
+    cfg['theme_path'] = os.path.join(
+        cfg['base_path'], cfg.get('theme_path', './themes'))
+    return cfg
+
+
 @click.group()
 def cli():
     """A wrapper around sphinx-build."""
@@ -156,6 +185,7 @@ def cli():
 
 @cli.command()
 @click.option('--config', type=click.Path(), required=True,
+              callback=load_config,
               help='The path to the documentation config file.')
 @click.option('--checkout-folder', type=click.Path(),
               default='checkouts')
@@ -163,13 +193,57 @@ def cli():
               help='The path to the output folder.')
 def build(config, checkout_folder, output):
     """Builds all documentation."""
-    with open(config) as f:
-        cfg = json.load(f)
-
     if output is None:
-        output = 'build/%s' % str(cfg['id'])
+        output = 'build/%s' % str(config['id'])
 
-    for version_cfg in cfg['versions']:
-        build_version(cfg, version_cfg,
+    for version_cfg in config['versions']:
+        build_version(config, version_cfg,
                       os.path.join(output, str(version_cfg['slug'])),
                       checkout_folder)
+
+
+@cli.command('nginx-config')
+@click.option('--config', type=click.Path(), required=True,
+              callback=load_config,
+              help='The path to the documentation config file.')
+@click.option('--url-prefix', default='/docs',
+              help='The URL prefix for the documentation.')
+@click.option('--path', type=click.Path(),
+              help='The path to the documentation on the filesystem.')
+def nginx_config(url_prefix, path, config):
+    """Spits out an nginx config for the given project that is ready
+    for inclusion.  This is useful because the docs have links to the
+    latest version of the docs but it requires webserver interaction
+    to support that pseudo URL.
+    """
+    escaped_prefix = re.escape(url_prefix)
+    if path is None:
+        path = os.path.abspath('build/%s' % str(config['id']))
+
+    try_versions = []
+    for version in config['versions']:
+        t = version.get('type')
+        if t == 'stable':
+            try_versions.append((0, version['slug']))
+        elif t == 'unstable':
+            try_versions.append((1, version['slug']))
+    try_versions.sort()
+
+    w = click.echo
+
+    w('location %s {' % url_prefix)
+    w('  alias %s;' % path)
+    w('  rewrite ^%s/?$ %s/latest/ redirect;' % (escaped_prefix, url_prefix))
+    w()
+    w('  set $doc_path XXX;')
+    w('  if ($request_uri ~* "^%s/latest(|/[^?]*?)$") {' % escaped_prefix)
+    w('    set $doc_path $1;')
+    w('  }')
+    for _, version in try_versions:
+        w()
+        w('  if (-f %s/%s$doc_path/index.html) {' % (path, version))
+        w('    return 302 %s/%s$doc_path;' % (url_prefix, version))
+        w('  }')
+    w()
+    w('  error_page 404 %s/404/index.html' % url_prefix)
+    w('}')

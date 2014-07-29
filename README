@@ -11,6 +11,3 @@ How to build the docs:
   $ flask-docbuilder build --config configs/werkzeug.json
   $ flask-docbuilder build --config configs/jinja2.json
   $ flask-docbuilder build --config configs/click.json
-
-I was lazy so currently this only works if the package is editable
-installed.  The script will *not* work if properly installed.

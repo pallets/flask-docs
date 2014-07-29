@@ -10,9 +10,11 @@
            "relations.html", "searchbox.html"]
   },
   "theme": "jinja",
+  "theme_path": "../themes",
   "versions": [
     {
       "slug": "dev",
+      "type": "unstable",
       "title": "Development",
       "note": "unstable",
       "version": "2.8-dev",
