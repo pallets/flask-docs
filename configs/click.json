@@ -18,6 +18,13 @@
       "version": "3.0-dev",
       "repo": "https://github.com/mitsuhiko/click@master",
       "warning": "This is the documentation for the development version of Click"
+    },
+    {
+      "slug": "2",
+      "title": "Click 2.x",
+      "note": "stable",
+      "version": "2.5",
+      "repo": "https://github.com/mitsuhiko/click@2.5"
     }
   ]
 }

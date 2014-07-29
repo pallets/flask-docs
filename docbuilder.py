@@ -29,6 +29,9 @@ os.chdir(_here)
 html_static_path = [os.path.join(_real_path, _x) for _x in html_static_path]
 __file__ = _old_file
 
+html_additional_pages = dict(globals().get('html_additional_pages') or {})
+html_additional_pages['404'] = '404.html'
+
 # Overrides
 html_favicon = None
 project = %(project)r
