@@ -11,3 +11,4 @@ How to build the docs:
   $ flask-docbuilder build --config configs/werkzeug.json
   $ flask-docbuilder build --config configs/jinja2.json
   $ flask-docbuilder build --config configs/click.json
+  $ flask-docbuilder build --config configs/flask-sqlalchemy.json
