@@ -150,6 +150,10 @@ def build_version(config, version_config, output_folder, checkout_folder):
         env = dict(os.environ)
         env['PYTHONPATH'] = os.path.abspath(version_checkout_folder)
 
+        for pre_build_step in config.get('pre_build_steps') or ():
+            subprocess.Popen(pre_build_step, shell=True,
+                             cwd=version_checkout_folder).wait()
+
         for builder in'dirhtml', 'json':
             subprocess.Popen([
                 'sphinx-build',
