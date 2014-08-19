@@ -9,6 +9,7 @@ setup(
     py_modules=['docbuilder'],
     install_requires=[
         'click>=2.0',
+        'Sphinx',
     ],
     classifiers=[
         'PRIVATE DO NOT UPLOAD',
