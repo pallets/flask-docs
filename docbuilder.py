@@ -56,6 +56,7 @@ pip install --upgrade Sphinx
 export PYTHONPATH="%(checkout_path)s:$PYTHONPATH"
 
 cd %(checkout_path)s
+pip install --editable .
 %(build_steps)s
 
 cd %(doc_source_path)s
@@ -177,7 +178,7 @@ def build_version(config, version_config, output_folder, checkout_folder):
                 'doc_source_path': doc_source_path,
                 'output_path': os.path.abspath(output_folder),
                 'config_path': config_path,
-                'build_steps': '\n'.join(config.get('pre_build_step') or ()),
+                'build_steps': '\n'.join(config.get('pre_build_steps') or ()),
             })
 
         subprocess.Popen(['bash', build_script_path]).wait()

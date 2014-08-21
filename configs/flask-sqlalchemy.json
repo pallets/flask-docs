@@ -7,9 +7,6 @@
     "**": ["sidebarlogo.html", "localtoc.html", "sidebarversions.html",
            "relations.html", "searchbox.html"]
   },
-  "pre_build_steps": [
-    "pip install --editable ."
-  ],
   "theme": "flask-sqlalchemy",
   "theme_path": "../themes",
   "versions": [
