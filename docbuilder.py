@@ -69,26 +69,6 @@ sphinx-build \\
     -b json -c "%(config_path)s" . "%(output_path)s"
 '''
 
-nginx_template = '''\
-location %(doc_url)s {
-  alias %(doc_path)s;
-
-  rewrite ^%(doc_url_escaped)s/?$ $(doc_url)s/latest/ redirect;
-
-  set $doc_path _;
-  if ($request_uri ~* "^%(doc_url_escaped)s/latest(|/[^?]*?)$") {
-    set $doc_path $1;
-  }
-  if (-f /srv/websites/flask.pocoo.org/docs/0.10$doc_path/index.html) {
-    return 302 /docs/0.10$doc_path;
-  }
-  if (-f /srv/websites/flask.pocoo.org/docs/dev$doc_path/index.html) {
-    return 302 /docs/dev$doc_path;
-  }
-}
-'''
-
-
 def build_context_vars(this_version, config):
     versions = []
     warning = None

@@ -2,3 +2,4 @@ checkouts
 build
 .DS_Store
 *.egg-info
+*.pyc
