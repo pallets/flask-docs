@@ -2,6 +2,7 @@
   "id": "werkzeug",
   "name": "Werkzeug",
   "doc_path": "./docs",
+  "default_url_prefix": "/docs",
   "sidebars": {
     "index": ["sidebarlogo.html", "sidebarintro.html", "sidebarversions.html",
               "searchbox.html"],

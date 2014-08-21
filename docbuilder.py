@@ -170,16 +170,63 @@ def build_version(config, version_config, output_folder, checkout_folder):
             pass
 
 
-def load_config(ctx, param, filename):
-    try:
-        with open(filename) as f:
-            cfg = json.load(f)
-    except IOError as e:
-        raise click.BadParameter('Could not load config: %s' % e)
+def _load_config(filename):
+    with open(filename) as f:
+        cfg = json.load(f)
     cfg['base_path'] = os.path.abspath(os.path.dirname(filename))
     cfg['theme_path'] = os.path.join(
         cfg['base_path'], cfg.get('theme_path', './themes'))
     return cfg
+
+
+def load_config(ctx, param, filename):
+    try:
+        return _load_config(ctx, param, filename)
+    except IOError as e:
+        raise click.BadParameter('Could not load config: %s' % e)
+
+
+def iter_configs(folder):
+    for filename in os.listdir(folder):
+        if filename.endswith('.json'):
+            yield _load_config(os.path.join(folder, filename))
+
+
+def generate_nginx_config(config, path, url_prefix=None):
+    if url_prefix is None:
+        url_prefix = config.get('default_url_prefix', '/')
+    url_prefix = url_prefix.rstrip('/')
+    escaped_prefix = re.escape(url_prefix)
+
+    try_versions = []
+    for version in config['versions']:
+        t = version.get('type')
+        if t == 'stable':
+            try_versions.append((0, version['slug']))
+        elif t == 'unstable':
+            try_versions.append((1, version['slug']))
+    try_versions.sort()
+
+    buf = []
+    w = buf.append
+
+    w('location %s {' % url_prefix)
+    w('  alias %s;' % path)
+    w('  rewrite ^%s/?$ %s/latest/ redirect;' % (escaped_prefix, url_prefix))
+    w('')
+    w('  set $doc_path XXX;')
+    w('  if ($request_uri ~* "^%s/latest(|/[^?]*?)$") {' % escaped_prefix)
+    w('    set $doc_path $1;')
+    w('  }')
+    for _, version in try_versions:
+        w('')
+        w('  if (-f %s/%s$doc_path/index.html) {' % (path, version))
+        w('    return 302 %s/%s$doc_path;' % (url_prefix, version))
+        w('  }')
+    w('')
+    w('  error_page 404 %s/404/index.html' % url_prefix)
+    w('}')
+    return '\n'.join(buf)
 
 
 @click.group()
@@ -210,7 +257,7 @@ def build(config, checkout_folder, output):
 @click.option('--config', type=click.Path(), required=True,
               callback=load_config,
               help='The path to the documentation config file.')
-@click.option('--url-prefix', default='/docs',
+@click.option('--url-prefix', default=None,
               help='The URL prefix for the documentation.')
 @click.option('--path', type=click.Path(),
               help='The path to the documentation on the filesystem.')
@@ -220,34 +267,30 @@ def nginx_config(url_prefix, path, config):
     latest version of the docs but it requires webserver interaction
     to support that pseudo URL.
     """
-    escaped_prefix = re.escape(url_prefix)
     if path is None:
         path = os.path.abspath('build/%s' % str(config['id']))
 
-    try_versions = []
-    for version in config['versions']:
-        t = version.get('type')
-        if t == 'stable':
-            try_versions.append((0, version['slug']))
-        elif t == 'unstable':
-            try_versions.append((1, version['slug']))
-    try_versions.sort()
+    click.echo(generate_nginx_config(config, path, url_prefix))
 
-    w = click.echo
 
-    w('location %s {' % url_prefix)
-    w('  alias %s;' % path)
-    w('  rewrite ^%s/?$ %s/latest/ redirect;' % (escaped_prefix, url_prefix))
-    w()
-    w('  set $doc_path XXX;')
-    w('  if ($request_uri ~* "^%s/latest(|/[^?]*?)$") {' % escaped_prefix)
-    w('    set $doc_path $1;')
-    w('  }')
-    for _, version in try_versions:
-        w()
-        w('  if (-f %s/%s$doc_path/index.html) {' % (path, version))
-        w('    return 302 %s/%s$doc_path;' % (url_prefix, version))
-        w('  }')
-    w()
-    w('  error_page 404 %s/404/index.html' % url_prefix)
-    w('}')
+@cli.command('build-all')
+@click.option('--config-folder', type=click.Path(), required=True,
+              default='configs', help='The folder with the config files')
+@click.option('--checkout-folder', type=click.Path(),
+              default='checkouts')
+@click.option('--build-folder', type=click.Path(), default='build',
+              help='Where to place the built documentation.')
+def build_all(config_folder, checkout_folder, build_folder):
+    """Builds all the documentation and places it in a folder together
+    with the nginx configs.
+    """
+    for config in iter_configs(config_folder):
+        output = '%s/%s' % (build_folder, str(config['id']))
+        for version_cfg in config['versions']:
+            build_version(config, version_cfg,
+                          os.path.join(output, str(version_cfg['slug'])),
+                          checkout_folder)
+
+        nginx_cfg = generate_nginx_config(config, os.path.abspath(output))
+        with open(os.path.join(output, 'nginx.conf'), 'w') as f:
+            f.write(nginx_cfg + '\n')

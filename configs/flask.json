@@ -2,6 +2,7 @@
   "id": "flask",
   "name": "Flask",
   "doc_path": "./docs",
+  "default_url_prefix": "/docs",
   "sidebars": {
     "index": ["sidebarintro.html", "sidebarversions.html", "searchbox.html"],
     "**": ["sidebarlogo.html", "localtoc.html", "sidebarversions.html",

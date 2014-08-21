@@ -2,6 +2,7 @@
   "id": "jinja",
   "name": "Jinja2",
   "doc_path": "./docs",
+  "default_url_prefix": "/docs",
   "pygments_style": "jinja_theme_support.JinjaStyle",
   "sidebars": {
     "index": ["sidebarlogo.html", "sidebarintro.html", "sidebarversions.html",
