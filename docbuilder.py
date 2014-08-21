@@ -47,6 +47,27 @@ html_context = %(context_vars)r
 pygments_style = %(pygments_style)r
 '''
 
+build_script = '''\
+#!/bin/bash
+. %(venv_path)s/bin/activate
+
+pip install --upgrade Sphinx
+
+export PYTHONPATH="%(checkout_path)s:$PYTHONPATH"
+
+cd %(checkout_path)s
+%(build_steps)s
+
+cd %(doc_source_path)s
+
+sphinx-build \\
+    -d %(doc_source_path)s/.doctrees \\
+    -b dirhtml -c "%(config_path)s" . "%(output_path)s"
+sphinx-build \\
+    -d %(doc_source_path)s/.doctrees \\
+    -b json -c "%(config_path)s" . "%(output_path)s"
+'''
+
 nginx_template = '''\
 location %(doc_url)s {
   alias %(doc_path)s;
@@ -119,9 +140,10 @@ def ensure_checkout(checkout_folder, repo_url):
 
 
 def build_version(config, version_config, output_folder, checkout_folder):
-    version_checkout_folder = os.path.join(
+    version_checkout_folder = os.path.abspath(os.path.join(
         checkout_folder, str('%s-%s' % (config['id'],
-                                        version_config['slug'])))
+                                        version_config['slug']))))
+    venv_path = os.path.join(version_checkout_folder, '.venv')
 
     ensure_checkout(version_checkout_folder, version_config['repo'])
     doc_source_path = os.path.join(version_checkout_folder,
@@ -131,12 +153,14 @@ def build_version(config, version_config, output_folder, checkout_folder):
     context_vars = build_context_vars(version_config['slug'], config)
 
     try:
+        subprocess.Popen(['virtualenv', venv_path]).wait()
+
         with open(os.path.join(config_path, 'conf.py'), 'w') as f:
             f.write(config_override_template % {
                 'project': config['name'],
                 'version': '.'.join(version_config['version'].split('.')[:2]),
                 'release': version_config['version'],
-                'real_path': os.path.abspath(doc_source_path),
+                'real_path': doc_source_path,
                 'theme_path': config['theme_path'],
                 'theme': config.get('theme') or 'pocoo',
                 'pygments_style': config.get('pygments_style')
@@ -145,24 +169,18 @@ def build_version(config, version_config, output_folder, checkout_folder):
                 'context_vars': context_vars,
             } + '\n')
 
-        # Make sure the checkout is added to the pythonpath before Sphinx
-        # invokes as Sphinx itself depends on Jinja2 for instance.
-        env = dict(os.environ)
-        env['PYTHONPATH'] = os.path.abspath(version_checkout_folder)
+        build_script_path = os.path.join(config_path, 'build.sh')
+        with open(build_script_path, 'w') as f:
+            f.write(build_script % {
+                'venv_path': venv_path,
+                'checkout_path': version_checkout_folder,
+                'doc_source_path': doc_source_path,
+                'output_path': os.path.abspath(output_folder),
+                'config_path': config_path,
+                'build_steps': '\n'.join(config.get('pre_build_step') or ()),
+            })
 
-        for pre_build_step in config.get('pre_build_steps') or ():
-            subprocess.Popen(pre_build_step, shell=True,
-                             cwd=version_checkout_folder).wait()
-
-        for builder in'dirhtml', 'json':
-            subprocess.Popen([
-                'sphinx-build',
-                '-d', os.path.join(doc_source_path, '.doctrees'),
-                '-b', builder,
-                '-c', config_path,
-                '.',
-                os.path.abspath(output_folder),
-            ], cwd=doc_source_path, env=env).wait()
+        subprocess.Popen(['bash', build_script_path]).wait()
     finally:
         try:
             shutil.rmtree(config_path)
@@ -210,21 +228,34 @@ def generate_nginx_config(config, path, url_prefix=None):
     buf = []
     w = buf.append
 
-    w('location %s {' % url_prefix)
-    w('  alias %s;' % path)
-    w('  rewrite ^%s/?$ %s/latest/ redirect;' % (escaped_prefix, url_prefix))
-    w('')
-    w('  set $doc_path XXX;')
-    w('  if ($request_uri ~* "^%s/latest(|/[^?]*?)$") {' % escaped_prefix)
-    w('    set $doc_path $1;')
-    w('  }')
-    for _, version in try_versions:
+    # Regular documentation versions.
+    for version in config['versions']:
+        w('location %s/%s {' % (url_prefix, version['slug']))
+        w('  alias %s/%s;' % (path, version['slug']))
+        w('}')
         w('')
-        w('  if (-f %s/%s$doc_path/index.html) {' % (path, version))
-        w('    return 302 %s/%s$doc_path;' % (url_prefix, version))
+
+    # Fallback blocks.  This also redirects the inventories.
+    w('location %s {' % url_prefix)
+    w('  rewrite ^%s/?$ %s/latest/ redirect;' % (escaped_prefix, url_prefix))
+
+    for redirect_prefix in '/latest', '':
+        w('')
+        # Always redirect the inventory to the development one for
+        # intersphinx.
+        w('  rewrite ^%s%s/objects.inv$ %s/%s/objects.inv;' %
+          (escaped_prefix, redirect_prefix,
+           url_prefix, try_versions[-1][1]))
+        w('  set $doc_path XXX;')
+        w('  if ($request_uri ~* "^%s%s(|/[^?]*?)$") {' %
+          (escaped_prefix, redirect_prefix))
+        w('    set $doc_path $1;')
         w('  }')
-    w('')
-    w('  error_page 404 %s/404/index.html;' % url_prefix)
+        for _, version in try_versions:
+            w('')
+            w('  if (-f %s/%s$doc_path/index.html) {' % (path, version))
+            w('    return 302 %s/%s$doc_path;' % (url_prefix, version))
+            w('  }')
     w('}')
     return '\n'.join(buf)
 
