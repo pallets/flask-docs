@@ -181,7 +181,7 @@ def _load_config(filename):
 
 def load_config(ctx, param, filename):
     try:
-        return _load_config(ctx, param, filename)
+        return _load_config(filename)
     except IOError as e:
         raise click.BadParameter('Could not load config: %s' % e)
 
