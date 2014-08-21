@@ -12,3 +12,6 @@ How to build the docs:
   $ flask-docbuilder build --config configs/jinja.json
   $ flask-docbuilder build --config configs/click.json
   $ flask-docbuilder build --config configs/flask-sqlalchemy.json
+
+Note that the master branch is built by the pocoo build server.
+Changes here might break the build so please be careful.
