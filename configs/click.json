@@ -22,12 +22,12 @@
       "warning": "This is the documentation for the development version of Click"
     },
     {
-      "slug": "4",
+      "slug": "3",
       "type": "stable",
       "title": "Click 3.x",
       "note": "stable",
       "version": "3.1",
-      "repo": "https://github.com/mitsuhiko/click@2.5"
+      "repo": "https://github.com/mitsuhiko/click@3.1"
     },
     {
       "slug": "2",
