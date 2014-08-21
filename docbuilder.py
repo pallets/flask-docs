@@ -224,7 +224,7 @@ def generate_nginx_config(config, path, url_prefix=None):
         w('    return 302 %s/%s$doc_path;' % (url_prefix, version))
         w('  }')
     w('')
-    w('  error_page 404 %s/404/index.html' % url_prefix)
+    w('  error_page 404 %s/404/index.html;' % url_prefix)
     w('}')
     return '\n'.join(buf)
 
