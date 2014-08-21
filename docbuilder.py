@@ -237,7 +237,7 @@ def generate_nginx_config(config, path, url_prefix=None):
         w('')
 
     # Fallback blocks.  This also redirects the inventories.
-    w('location %s {' % url_prefix)
+    w('location %s {' % (url_prefix or '/'))
     w('  rewrite ^%s/?$ %s/latest/ redirect;' % (escaped_prefix, url_prefix))
 
     for redirect_prefix in '/latest', '':
