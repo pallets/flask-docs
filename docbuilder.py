@@ -69,6 +69,7 @@ sphinx-build \\
     -b json -c "%(config_path)s" . "%(output_path)s"
 '''
 
+
 def build_context_vars(this_version, config):
     versions = []
     warning = None
@@ -102,18 +103,16 @@ def ensure_checkout(checkout_folder, repo_url):
             'git', 'fetch', 'origin',
             '%s:%s' % (branch, branch),
             '--update-head-ok',
-            '--depth', '1',
         ], cwd=checkout_folder).wait()
         subprocess.Popen([
             'git', 'reset', '--hard',
         ], cwd=checkout_folder).wait()
         subprocess.Popen([
-            'git', 'checkout', branch,
+            'git', 'checkout', '--force', branch,
         ], cwd=checkout_folder).wait()
     else:
         subprocess.Popen([
             'git', 'clone',
-            '--depth', '1',
             '--branch', branch,
             url,
             checkout_folder
