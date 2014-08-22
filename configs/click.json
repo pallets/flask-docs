@@ -26,8 +26,8 @@
       "type": "stable",
       "title": "Click 3.x",
       "note": "stable",
-      "version": "3.1",
-      "repo": "https://github.com/mitsuhiko/click@3.1"
+      "version": "3.2",
+      "repo": "https://github.com/mitsuhiko/click@3.2"
     },
     {
       "slug": "2",
