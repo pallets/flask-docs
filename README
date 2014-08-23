@@ -4,14 +4,18 @@ Flask Documentation
 This repository contains sphinx styles for Flask and Flask related
 projects and a wrapper script to build the online documentation.
 
-How to build the docs:
+How to build the docs (for instance Flask):
 
   $ pip install --editable .
   $ flask-docbuilder build --config configs/flask.json
-  $ flask-docbuilder build --config configs/werkzeug.json
-  $ flask-docbuilder build --config configs/jinja.json
-  $ flask-docbuilder build --config configs/click.json
-  $ flask-docbuilder build --config configs/flask-sqlalchemy.json
 
 Note that the master branch is built by the pocoo build server.
 Changes here might break the build so please be careful.
+
+How it works in general:
+
+* themes are shared and live in the `themes` folder.
+* configs about how the per-project docs are structured live in
+  the `configs` folder.
+* the build server runs `flask-docbuilder build-all` to generate
+  all documentation and stores it on the pocoo server.
