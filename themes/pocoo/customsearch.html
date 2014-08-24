@@ -11,8 +11,24 @@
         var s = document.getElementsByTagName('script')[0];
         s.parentNode.insertBefore(gcse, s);
       })();
+
+      function processGCSSearchTitle(title) {
+        return title.replace(/ —[^—]*?$/, '');
+      }
     </script>
     <gcse:search linktarget="_self"></gcse:search>
+  </div>
+
+  <div style="display: none">
+    <div id="base_webResult">
+      <div class="gs-webResult gs-result">
+        <div class="gs-title">
+          <a class="gs-title" data-attr="{href:unescapedUrl,target:target}"
+            data-body="html(processGCSSearchTitle(title))"></a>
+        </div>
+        <div class="gs-snippet" data-body="html(content)"></div>
+      </div>
+    </div>
   </div>
 {% endmacro %}
 
@@ -40,9 +56,6 @@
     }
     .gsc-input-box-focus {
         border-color: {{ primary_color }}!important;
-    }
-    .gsc-url-top, .gsc-thumbnail {
-        display: none;
     }
     .gs-result a, .gs-result a *, .gs-result .gs-title,
     .gsc-results .gsc-cursor-box .gsc-cursor-page {
