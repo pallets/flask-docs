@@ -15,15 +15,22 @@
       "type": "unstable",
       "title": "Development",
       "note": "unstable",
-      "version": "2.0-dev",
+      "version": "3.0-dev",
       "repo": "https://github.com/mitsuhiko/flask-sqlalchemy@master",
       "warning": "This is the documentation for the development version of Flask-SQLAlchemy"
     },
     {
-      "slug": "1.0",
+      "slug": "2.0",
       "type": "stable",
-      "title": "Flask-SQLAlchemy 1.x",
+      "title": "Flask-SQLAlchemy 2.x",
       "note": "stable",
+      "version": "2.0",
+      "repo": "https://github.com/mitsuhiko/flask-sqlalchemy@2.0"
+    },
+    {
+      "slug": "1.0",
+      "title": "Flask-SQLAlchemy 1.x",
+      "note": null,
       "version": "1.0",
       "repo": "https://github.com/mitsuhiko/flask-sqlalchemy@1.0"
     },
