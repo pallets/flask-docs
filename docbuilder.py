@@ -16,6 +16,10 @@ sys.path.insert(0, %(theme_path)r)
 #__import__('pocoo_theme_support')
 sys.path[:] = [os.path.abspath(x) for x in sys.path]
 
+# Some defaults
+html_static_path = []
+latex_additional_files = []
+
 # Source the old file and ensure the paths are setup correctly afterwards
 _old_file = __file__
 __file__ = 'conf.py'
@@ -26,6 +30,8 @@ execfile('conf.py')
 sys.path[:] = [os.path.abspath(x) for x in sys.path]
 os.chdir(_here)
 html_static_path = [os.path.join(_real_path, _x) for _x in html_static_path]
+latex_additional_files = [os.path.join(_real_path, _x) for _x in
+                          latex_additional_files]
 __file__ = _old_file
 
 html_additional_pages = dict(globals().get('html_additional_pages') or {})
@@ -64,9 +70,16 @@ cd %(doc_source_path)s
 sphinx-build \\
     -d %(doc_source_path)s/.doctrees \\
     -b dirhtml -c "%(config_path)s" . "%(output_path)s"
+
 sphinx-build \\
     -d %(doc_source_path)s/.doctrees \\
     -b json -c "%(config_path)s" . "%(output_path)s"
+
+sphinx-build \\
+    -d %(doc_source_path)s/.doctrees \\
+    -b latex -c "%(config_path)s" . "%(output_path)s/.latex"
+
+(cd %(output_path)s/.latex; make all-pdf)
 '''
 
 
