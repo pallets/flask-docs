@@ -22,8 +22,15 @@
       "warning": "This is the documentation for the development version of Werkzeug"
     },
     {
-      "slug": "0.9",
+      "slug": "0.10",
       "type": "stable",
+      "title": "Werkzeug 0.10.x",
+      "note": "stable",
+      "version": "0.10",
+      "repo": "https://github.com/mitsuhiko/werkzeug@0.10"
+    },
+    {
+      "slug": "0.9",
       "title": "Werkzeug 0.9.x",
       "note": "stable",
       "version": "0.9.6",
