@@ -1,0 +1,25 @@
+{
+  "id": "platter",
+  "name": "Platter",
+  "doc_path": "./docs",
+  "pygments_style": "tango",
+  "sidebars": {
+    "index": ["sidebarintro.html", "sidebarversions.html",
+              "searchbox.html"],
+    "**": ["sidebarlogo.html", "localtoc.html", "sidebarversions.html",
+           "relations.html", "searchbox.html"]
+  },
+  "theme": "platter",
+  "theme_path": "../themes",
+  "versions": [
+    {
+      "slug": "dev",
+      "type": "unstable",
+      "title": "Development",
+      "note": "unstable",
+      "version": "4.0-dev",
+      "repo": "https://github.com/mitsuhiko/platter@master",
+      "warning": "This is the documentation for the development version of Platter"
+    }
+  ]
+}
