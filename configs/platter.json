@@ -17,7 +17,7 @@
       "type": "unstable",
       "title": "Development",
       "note": "unstable",
-      "version": "4.0-dev",
+      "version": "1.0-dev",
       "repo": "https://github.com/mitsuhiko/platter@master",
       "warning": "This is the documentation for the development version of Platter"
     }
