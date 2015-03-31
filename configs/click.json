@@ -27,19 +27,19 @@
       "title": "Click 4.x",
       "note": "stable",
       "version": "4.0",
-      "repo": "https://github.com/mitsuhiko/click@4.0"
+      "repo": "https://github.com/mitsuhiko/click@4.x-maintenance"
     },
     {
       "slug": "3",
       "title": "Click 3.x",
       "version": "3.3",
-      "repo": "https://github.com/mitsuhiko/click@3.3"
+      "repo": "https://github.com/mitsuhiko/click@3.x-maintenance"
     },
     {
       "slug": "2",
       "title": "Click 2.x",
       "version": "2.6",
-      "repo": "https://github.com/mitsuhiko/click@2.6"
+      "repo": "https://github.com/mitsuhiko/click@2.x-maintenance"
     }
   ]
 }
