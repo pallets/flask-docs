@@ -17,9 +17,17 @@
       "type": "unstable",
       "title": "Development",
       "note": "unstable",
-      "version": "5.0-dev",
+      "version": "6.0-dev",
       "repo": "https://github.com/mitsuhiko/click@master",
       "warning": "This is the documentation for the development version of Click"
+    },
+    {
+      "slug": "5",
+      "type": "stable",
+      "title": "Click 5.x",
+      "note": "stable",
+      "version": "5.0",
+      "repo": "https://github.com/mitsuhiko/click@5.x-maintenance"
     },
     {
       "slug": "4",
