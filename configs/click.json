@@ -31,9 +31,7 @@
     },
     {
       "slug": "4",
-      "type": "stable",
       "title": "Click 4.x",
-      "note": "stable",
       "version": "4.0",
       "repo": "https://github.com/mitsuhiko/click@4.x-maintenance"
     },
