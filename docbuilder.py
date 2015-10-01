@@ -189,7 +189,8 @@ def build_version(config, version_config, output_folder, checkout_folder):
                 'build_steps': '\n'.join(config.get('pre_build_steps') or ()),
             })
 
-        subprocess.Popen(['bash', build_script_path]).wait()
+        client = subprocess.Popen(['bash', build_script_path])
+        client.wait()
     finally:
         if client is not None:
             try:
