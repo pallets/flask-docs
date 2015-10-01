@@ -36,6 +36,8 @@ __file__ = _old_file
 
 html_additional_pages = dict(globals().get('html_additional_pages') or {})
 html_additional_pages['404'] = '404.html'
+if latex_logo:
+    latex_logo = os.path.join(_real_path, latex_logo)
 
 # Overrides
 html_favicon = None
@@ -69,15 +71,15 @@ cd %(doc_source_path)s
 
 sphinx-build \\
     -d %(doc_source_path)s/.doctrees \\
-    -b dirhtml -c "%(config_path)s" . "%(output_path)s"
+    -b dirhtml -c "%(config_path)s" -T . "%(output_path)s"
 
 sphinx-build \\
     -d %(doc_source_path)s/.doctrees \\
-    -b json -c "%(config_path)s" . "%(output_path)s"
+    -b json -c "%(config_path)s" -T . "%(output_path)s"
 
 sphinx-build \\
     -d %(doc_source_path)s/.doctrees \\
-    -b latex -c "%(config_path)s" . "%(output_path)s/.latex"
+    -b latex -c "%(config_path)s" -T . "%(output_path)s/.latex"
 
 (cd %(output_path)s/.latex; make all-pdf)
 '''
@@ -110,26 +112,38 @@ def ensure_checkout(checkout_folder, repo_url):
     except OSError:
         pass
 
+    client = None
     url, branch = repo_url.rsplit('@', 1)
-    if os.path.isdir(os.path.join(checkout_folder, '.git')):
-        subprocess.Popen([
-            'git', 'fetch', 'origin',
-            '%s:%s' % (branch, branch),
-            '--update-head-ok',
-        ], cwd=checkout_folder).wait()
-        subprocess.Popen([
-            'git', 'reset', '--hard',
-        ], cwd=checkout_folder).wait()
-        subprocess.Popen([
-            'git', 'checkout', '--force', branch,
-        ], cwd=checkout_folder).wait()
-    else:
-        subprocess.Popen([
-            'git', 'clone',
-            '--branch', branch,
-            url,
-            checkout_folder
-        ]).wait()
+    try:
+        if os.path.isdir(os.path.join(checkout_folder, '.git')):
+            client = subprocess.Popen([
+                'git', 'fetch', 'origin',
+                '%s:%s' % (branch, branch),
+                '--update-head-ok',
+            ], cwd=checkout_folder)
+            client.wait()
+            client = subprocess.Popen([
+                'git', 'reset', '--hard',
+            ], cwd=checkout_folder)
+            client.wait()
+            client = subprocess.Popen([
+                'git', 'checkout', '--force', branch,
+            ], cwd=checkout_folder)
+            client.wait()
+        else:
+            client = subprocess.Popen([
+                'git', 'clone',
+                '--branch', branch,
+                url,
+                checkout_folder
+            ])
+            client.wait()
+    finally:
+        if client is not None:
+            try:
+                client.kill()
+            except OSError:
+                pass
 
 
 def build_version(config, version_config, output_folder, checkout_folder):
@@ -144,9 +158,11 @@ def build_version(config, version_config, output_folder, checkout_folder):
 
     config_path = tempfile.mkdtemp(prefix='.versionoverlay')
     context_vars = build_context_vars(version_config['slug'], config)
+    client = None
 
     try:
-        subprocess.Popen(['virtualenv', venv_path]).wait()
+        client = subprocess.Popen(['virtualenv', venv_path])
+        client.wait()
 
         with open(os.path.join(config_path, 'conf.py'), 'w') as f:
             f.write(config_override_template % {
@@ -175,6 +191,11 @@ def build_version(config, version_config, output_folder, checkout_folder):
 
         subprocess.Popen(['bash', build_script_path]).wait()
     finally:
+        if client is not None:
+            try:
+                client.kill()
+            except OSError:
+                pass
         try:
             shutil.rmtree(config_path)
         except (OSError, IOError):

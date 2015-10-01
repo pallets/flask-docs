@@ -210,7 +210,7 @@ div.admonition {
     border-bottom: 1px solid #ccc;
 }
 
-div.admonition tt.xref, div.admonition a tt {
+div.admonition code.xref, div.admonition a code {
     border-bottom: 1px solid #fafafa;
 }
 
@@ -261,7 +261,7 @@ p.admonition-title:after {
     content: ":";
 }
 
-pre, tt {
+pre, code {
     font-family: 'Consolas', 'Menlo', 'Deja Vu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
     font-size: 0.9em;
 }
@@ -269,11 +269,11 @@ pre, tt {
 img.screenshot {
 }
 
-tt.descname, tt.descclassname {
+code.descname, code.descclassname {
     font-size: 0.95em;
 }
 
-tt.descname {
+code.descname {
     padding-right: 0.08em;
 }
 
@@ -368,13 +368,13 @@ dl dl pre {
     padding-left: 90px;
 }
  
-tt {
+code {
     background-color: #ecf0f3;
     color: #222;
     /* padding: 1px 2px; */
 }
 
-tt.xref, a tt {
+code.xref, a code {
     background-color: #FBFBFB;
     border-bottom: 1px solid white;
 }
@@ -389,6 +389,6 @@ a.footnote-reference {
     vertical-align: top;
 }
 
-a:hover tt {
+a:hover code {
     background: #EEE;
 }
