@@ -19,6 +19,7 @@ sys.path[:] = [os.path.abspath(x) for x in sys.path]
 # Some defaults
 html_static_path = []
 latex_additional_files = []
+latex_logo = None
 
 # Source the old file and ensure the paths are setup correctly afterwards
 _old_file = __file__
