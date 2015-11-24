@@ -17,9 +17,17 @@
       "type": "unstable",
       "title": "Development",
       "note": "unstable",
-      "version": "6.0-dev",
+      "version": "7.0-dev",
       "repo": "https://github.com/mitsuhiko/click@master",
       "warning": "This is the documentation for the development version of Click"
+    },
+    {
+      "slug": "6",
+      "type": "stable",
+      "title": "Click 6.x",
+      "note": "stable",
+      "version": "6.0",
+      "repo": "https://github.com/mitsuhiko/click@6.0"
     },
     {
       "slug": "5",
@@ -34,18 +42,6 @@
       "title": "Click 4.x",
       "version": "4.0",
       "repo": "https://github.com/mitsuhiko/click@4.x-maintenance"
-    },
-    {
-      "slug": "3",
-      "title": "Click 3.x",
-      "version": "3.3",
-      "repo": "https://github.com/mitsuhiko/click@3.x-maintenance"
-    },
-    {
-      "slug": "2",
-      "title": "Click 2.x",
-      "version": "2.6",
-      "repo": "https://github.com/mitsuhiko/click@2.x-maintenance"
     }
   ]
 }
