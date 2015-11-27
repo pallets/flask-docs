@@ -27,7 +27,7 @@
       "title": "Click 6.x",
       "note": "stable",
       "version": "6.0",
-      "repo": "https://github.com/mitsuhiko/click@6.0"
+      "repo": "https://github.com/mitsuhiko/click@6.x-maintenance"
     },
     {
       "slug": "5",
