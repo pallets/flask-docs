@@ -16,7 +16,7 @@
       "type": "unstable",
       "title": "Development",
       "note": "unstable",
-      "version": "1.0-dev",
+      "version": "0.11-dev",
       "repo": "https://github.com/mitsuhiko/flask@master",
       "warning": "This is the documentation for the development version of Flask"
     },
