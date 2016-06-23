@@ -411,6 +411,7 @@ div.carbon_ads a.carbon-img {
 
 div.carbon_ads a.carbon-poweredby {
     margin-top: 7px;
+    margin-left: 15px;
     float: right;
     font-size: 11px;
 }
