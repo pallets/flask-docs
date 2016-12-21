@@ -21,13 +21,20 @@
       "warning": "This is the documentation for the development version of Flask"
     },
     {
-      "slug": "0.11",
+      "slug": "0.12",
       "type": "stable",
-      "title": "Flask 0.11.x",
+      "title": "Flask 0.12.x",
       "note": "stable",
+      "version": "0.12",
+      "repo": "https://github.com/mitsuhiko/flask@0.12"
+    },
+    {
+      "slug": "0.11",
+      "title": "Flask 0.11.x",
+      "note": null,
       "version": "0.11",
       "repo": "https://github.com/mitsuhiko/flask@0.11"
-    },
+    }
     {
       "slug": "0.10",
       "title": "Flask 0.10.x",
