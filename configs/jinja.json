@@ -19,7 +19,7 @@
       "title": "Jinja 2.9",
       "note": "stable",
       "version": "2.9",
-      "repo": "https://github.com/pallets/jinja2@2.9"
+      "repo": "https://github.com/pallets/jinja2@2.9-maintenance"
     },
     {
       "slug": "dev",
