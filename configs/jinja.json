@@ -14,12 +14,20 @@
   "theme_path": "../themes",
   "versions": [
     {
+      "slug": "2.9",
+      "type": "stable",
+      "title": "Jinja 2.9",
+      "note": "stable",
+      "version": "2.9",
+      "repo": "https://github.com/pallets/jinja2@2.9"
+    },
+    {
       "slug": "dev",
       "type": "unstable",
       "title": "Development",
       "note": "unstable",
-      "version": "2.8-dev",
-      "repo": "https://github.com/mitsuhiko/jinja2@master",
+      "version": "2.10-dev",
+      "repo": "https://github.com/pallets/jinja@master",
       "warning": "This is the documentation for the development version of Jinja2"
     }
   ]
