@@ -20,33 +20,20 @@
       "warning": "This is the documentation for the development version of Flask-SQLAlchemy"
     },
     {
+      "slug": "2.2",
+      "type": "stable",
+      "title": "Flask-SQLAlchemy 2.2",
+      "note": "stable",
+      "version": "2.2",
+      "repo": "https://github.com/mitsuhiko/flask-sqlalchemy@2.2"
+    },
+    {
       "slug": "2.1",
       "type": "stable",
       "title": "Flask-SQLAlchemy 2.1",
       "note": "stable",
       "version": "2.1",
       "repo": "https://github.com/mitsuhiko/flask-sqlalchemy@2.1"
-    },
-    {
-      "slug": "2.0",
-      "title": "Flask-SQLAlchemy 2.0",
-      "note": null,
-      "version": "2.0",
-      "repo": "https://github.com/mitsuhiko/flask-sqlalchemy@2.0"
-    },
-    {
-      "slug": "1.0",
-      "title": "Flask-SQLAlchemy 1.0",
-      "note": null,
-      "version": "1.0",
-      "repo": "https://github.com/mitsuhiko/flask-sqlalchemy@1.0"
-    },
-    {
-      "slug": "0.16",
-      "title": "Flask-SQLAlchemy 0.16",
-      "note": null,
-      "version": "0.16",
-      "repo": "https://github.com/mitsuhiko/flask-sqlalchemy@0.16"
     }
   ]
 }
