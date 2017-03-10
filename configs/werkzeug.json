@@ -17,24 +17,24 @@
       "type": "unstable",
       "title": "Development",
       "note": "unstable",
-      "version": "0.12-dev",
+      "version": "0.13-dev",
       "repo": "https://github.com/mitsuhiko/werkzeug@master",
       "warning": "This is the documentation for the development version of Werkzeug"
     },
     {
-      "slug": "0.11",
+      "slug": "0.12",
       "type": "stable",
-      "title": "Werkzeug 0.11.x",
+      "title": "Werkzeug 0.12.x",
       "note": "stable",
-      "version": "0.11",
-      "repo": "https://github.com/mitsuhiko/werkzeug@0.11"
+      "version": "0.12",
+      "repo": "https://github.com/mitsuhiko/werkzeug@0.12"
     },
     {
-      "slug": "0.10",
-      "title": "Werkzeug 0.10.x",
+      "slug": "0.11",
+      "title": "Werkzeug 0.11.x",
       "note": "stable",
-      "version": "0.10.4",
-      "repo": "https://github.com/mitsuhiko/werkzeug@0.10-maintenance"
+      "version": "0.11.15",
+      "repo": "https://github.com/mitsuhiko/werkzeug@0.11-maintenance"
     }
   ]
 }
