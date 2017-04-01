@@ -26,7 +26,7 @@
       "title": "Flask 0.12.x",
       "note": "stable",
       "version": "0.12",
-      "repo": "https://github.com/mitsuhiko/flask@0.12"
+      "repo": "https://github.com/mitsuhiko/flask@0.12.1"
     },
     {
       "slug": "0.11",
