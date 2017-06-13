@@ -26,15 +26,15 @@
       "type": "stable",
       "title": "Werkzeug 0.12.x",
       "note": "stable",
-      "version": "0.12",
-      "repo": "https://github.com/mitsuhiko/werkzeug@0.12"
+      "version": "0.12.2",
+      "repo": "https://github.com/mitsuhiko/werkzeug@0.12.2"
     },
     {
       "slug": "0.11",
       "title": "Werkzeug 0.11.x",
       "note": "stable",
       "version": "0.11.15",
-      "repo": "https://github.com/mitsuhiko/werkzeug@0.11-maintenance"
+      "repo": "https://github.com/mitsuhiko/werkzeug@0.11.15"
     }
   ]
 }
