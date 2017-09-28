@@ -3,9 +3,19 @@
   "name": "Flask-SQLAlchemy",
   "doc_path": "./docs",
   "sidebars": {
-    "index": ["sidebarintro.html", "sidebarversions.html", "searchbox.html"],
-    "**": ["sidebarlogo.html", "localtoc.html", "sidebarversions.html",
-           "relations.html", "searchbox.html"]
+    "index": [
+      "sidebarlogo.html",
+      "sidebarintro.html",
+      "sidebarversions.html",
+      "searchbox.html"
+    ],
+    "**": [
+      "sidebarlogo.html",
+      "localtoc.html",
+      "sidebarversions.html",
+      "relations.html",
+      "searchbox.html"
+    ]
   },
   "theme": "flask-sqlalchemy",
   "theme_path": "../themes",
@@ -14,24 +24,29 @@
       "slug": "dev",
       "type": "unstable",
       "title": "Development",
-      "note": "unstable",
       "version": "3.0-dev",
       "repo": "https://github.com/mitsuhiko/flask-sqlalchemy@master",
       "warning": "This is the documentation for the development version of Flask-SQLAlchemy"
     },
     {
+      "slug": "2.3",
+      "type": "stable",
+      "title": "2.3.0",
+      "note": "stable",
+      "version": "2.3",
+      "repo": "https://github.com/mitsuhiko/flask-sqlalchemy@2.3.0"
+    },
+    {
       "slug": "2.2",
       "type": "stable",
-      "title": "Flask-SQLAlchemy 2.2",
-      "note": "stable",
+      "title": "2.2.0",
       "version": "2.2",
       "repo": "https://github.com/mitsuhiko/flask-sqlalchemy@2.2"
     },
     {
       "slug": "2.1",
       "type": "stable",
-      "title": "Flask-SQLAlchemy 2.1",
-      "note": "stable",
+      "title": "2.1.0",
       "version": "2.1",
       "repo": "https://github.com/mitsuhiko/flask-sqlalchemy@2.1"
     }

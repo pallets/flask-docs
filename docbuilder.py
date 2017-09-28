@@ -66,6 +66,8 @@ export PYTHONPATH="%(checkout_path)s:$PYTHONPATH"
 
 cd %(checkout_path)s
 pip install --editable .
+git submodule update --init
+
 %(build_steps)s
 
 cd %(doc_source_path)s
