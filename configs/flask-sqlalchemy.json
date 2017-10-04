@@ -31,10 +31,10 @@
     {
       "slug": "2.3",
       "type": "stable",
-      "title": "2.3.0",
+      "title": "2.3.1",
       "note": "stable",
-      "version": "2.3",
-      "repo": "https://github.com/mitsuhiko/flask-sqlalchemy@2.3.0"
+      "version": "2.3.1",
+      "repo": "https://github.com/mitsuhiko/flask-sqlalchemy@2.3.1"
     },
     {
       "slug": "2.2",
