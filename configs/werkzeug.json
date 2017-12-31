@@ -26,8 +26,8 @@
       "type": "stable",
       "title": "Werkzeug 0.14.x",
       "note": "stable",
-      "version": "0.14",
-      "repo": "https://github.com/mitsuhiko/werkzeug@0.14"
+      "version": "0.14.1",
+      "repo": "https://github.com/mitsuhiko/werkzeug@0.14.1"
     },
     {
       "slug": "0.13",
