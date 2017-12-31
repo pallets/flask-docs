@@ -22,10 +22,16 @@
       "warning": "This is the documentation for the development version of Werkzeug"
     },
     {
-      "slug": "0.13",
+      "slug": "0.14",
       "type": "stable",
-      "title": "Werkzeug 0.13.x",
+      "title": "Werkzeug 0.14.x",
       "note": "stable",
+      "version": "0.14",
+      "repo": "https://github.com/mitsuhiko/werkzeug@0.14"
+    },
+    {
+      "slug": "0.13",
+      "title": "Werkzeug 0.13.x",
       "version": "0.13",
       "repo": "https://github.com/mitsuhiko/werkzeug@0.13"
     },
@@ -34,12 +40,6 @@
       "title": "Werkzeug 0.12.x",
       "version": "0.12.2",
       "repo": "https://github.com/mitsuhiko/werkzeug@0.12.2"
-    },
-    {
-      "slug": "0.11",
-      "title": "Werkzeug 0.11.x",
-      "version": "0.11.15",
-      "repo": "https://github.com/mitsuhiko/werkzeug@0.11.15"
     }
   ]
 }
