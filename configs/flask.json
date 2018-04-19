@@ -3,6 +3,10 @@
   "name": "Flask",
   "doc_path": "./docs",
   "default_url_prefix": "/docs",
+  "new_theme": true,
+  "pre_build_steps": [
+    "pip install -U sphinx sphinxcontrib-log-cabinet pallets-sphinx-themes"
+  ],
   "sidebars": {
     "index": ["sidebarintro.html", "sidebarversions.html", "searchbox.html"],
     "**": ["sidebarlogo.html", "localtoc.html", "sidebarversions.html",
@@ -16,31 +20,23 @@
       "type": "unstable",
       "title": "Development",
       "note": "unstable",
-      "version": "0.13-dev",
-      "repo": "https://github.com/mitsuhiko/flask@master",
-      "warning": "This is the documentation for the development version of Flask"
+      "version": "1.1.dev",
+      "repo": "https://github.com/davidism/flask@master"
+    },
+    {
+      "slug": "1.0",
+      "type": "stable",
+      "title": "Flask 1.0",
+      "note": "stable",
+      "version": "1.0",
+      "repo": "https://github.com/davidism/flask@1.0-maintenance"
     },
     {
       "slug": "0.12",
-      "type": "stable",
-      "title": "Flask 0.12.x",
-      "note": "stable",
-      "version": "0.12.2",
-      "repo": "https://github.com/mitsuhiko/flask@0.12.2"
-    },
-    {
-      "slug": "0.11",
-      "title": "Flask 0.11.x",
+      "title": "Flask 0.12",
       "note": null,
-      "version": "0.11.1",
-      "repo": "https://github.com/mitsuhiko/flask@0.11.1"
-    },
-    {
-      "slug": "0.10",
-      "title": "Flask 0.10.x",
-      "note": null,
-      "version": "0.10.1",
-      "repo": "https://github.com/mitsuhiko/flask@0.10.1"
+      "version": "0.12.3",
+      "repo": "https://github.com/davidism/flask@0.12-maintenance"
     }
   ]
 }
