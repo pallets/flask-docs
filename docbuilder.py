@@ -9,15 +9,21 @@ import click
 
 
 config_override_template = '''\
+new_theme = %(new_theme)s
+
 import os
 import sys
 
-sys.path.insert(0, %(theme_path)r)
-#__import__('pocoo_theme_support')
+if not new_theme:
+    sys.path.insert(0, %(theme_path)r)
+    #__import__('pocoo_theme_support')
+
 sys.path[:] = [os.path.abspath(x) for x in sys.path]
 
 # Some defaults
 html_static_path = []
+html_favicon = None
+html_logo = None
 latex_additional_files = []
 latex_logo = None
 
@@ -27,33 +33,51 @@ __file__ = 'conf.py'
 _here = os.getcwd()
 _real_path = %(real_path)r
 os.chdir(_real_path)
-execfile('conf.py')
+
+with open('conf.py', 'rb') as f:
+    code = compile(f.read(), 'conf.py', 'exec')
+    exec(code, globals())
+
 sys.path[:] = [os.path.abspath(x) for x in sys.path]
 os.chdir(_here)
-html_static_path = [os.path.join(_real_path, _x) for _x in html_static_path]
-latex_additional_files = [os.path.join(_real_path, _x) for _x in
-                          latex_additional_files]
+
+
+def fix_path(x):
+    if x:
+        return os.path.join(_real_path, x)
+
+
+html_static_path = [fix_path(_x) for _x in html_static_path]
+latex_additional_files = [fix_path(_x) for _x in latex_additional_files]
 __file__ = _old_file
 
-html_additional_pages = dict(globals().get('html_additional_pages') or {})
-html_additional_pages['404'] = '404.html'
-if latex_logo:
-    latex_logo = os.path.join(_real_path, latex_logo)
+if not new_theme:
+    html_additional_pages = dict(globals().get('html_additional_pages') or {})
+    html_additional_pages['404'] = '404.html'
 
-# Overrides
-html_favicon = None
-project = %(project)r
+html_favicon = fix_path(html_favicon)
+html_logo = fix_path(html_logo)
+latex_logo = fix_path(latex_logo)
+
+release = %(release)r
 version = %(version)r
 
-templates_path = []
-html_title = '%%s Documentation (%%s)' %% (project, version)
-html_theme = %(theme)r
-html_theme_options = {}
-html_theme_path = [%(theme_path)r]
-html_sidebars = %(sidebars)r
-html_context = %(context_vars)r
+# Overrides
+if not new_theme:
+    html_favicon = None
+    project = %(project)r
 
-pygments_style = %(pygments_style)r
+    templates_path = []
+    html_title = '%%s Documentation (%%s)' %% (project, version)
+    html_theme = %(theme)r
+    html_theme_options = {}
+    html_theme_path = [%(theme_path)r]
+    html_sidebars = %(sidebars)r
+
+    pygments_style = %(pygments_style)r
+
+html_context = dict(globals().get('html_context') or {})
+html_context.update(%(context_vars)r)
 '''
 
 build_script = '''\
@@ -76,21 +100,23 @@ sphinx-build \\
     -d %(doc_source_path)s/.doctrees \\
     -b dirhtml -c "%(config_path)s" -T . "%(output_path)s"
 
-sphinx-build \\
-    -d %(doc_source_path)s/.doctrees \\
-    -b json -c "%(config_path)s" -T . "%(output_path)s"
+#sphinx-build \\
+#    -d %(doc_source_path)s/.doctrees \\
+#    -b json -c "%(config_path)s" -T . "%(output_path)s"
 
-sphinx-build \\
-    -d %(doc_source_path)s/.doctrees \\
-    -b latex -c "%(config_path)s" -T . "%(output_path)s/.latex"
+#sphinx-build \\
+#    -d %(doc_source_path)s/.doctrees \\
+#    -b latex -c "%(config_path)s" -T . "%(output_path)s/.latex"
 
-(cd %(output_path)s/.latex; make all-pdf)
+#(cd %(output_path)s/.latex; make all-pdf)
 '''
 
 
 def build_context_vars(this_version, config):
     versions = []
     warning = None
+    config_new_theme = config.get('new_theme')
+    current_new_theme = None
 
     for version in config['versions']:
         is_current = this_version == version['slug']
@@ -102,6 +128,12 @@ def build_context_vars(this_version, config):
         })
         if is_current:
             warning = version.get('warning')
+            current_new_theme = version.get('new_theme')
+
+    if config_new_theme or current_new_theme:
+        return {
+            'versions': versions,
+        }
 
     return {
         'documentation_versions': versions,
@@ -161,6 +193,8 @@ def build_version(config, version_config, output_folder, checkout_folder):
 
     config_path = tempfile.mkdtemp(prefix='.versionoverlay')
     context_vars = build_context_vars(version_config['slug'], config)
+    new_theme = bool(
+        config.get('new_theme') or version_config.get('new_theme'))
     client = None
 
     try:
@@ -170,6 +204,7 @@ def build_version(config, version_config, output_folder, checkout_folder):
         with open(os.path.join(config_path, 'conf.py'), 'w') as f:
             f.write(config_override_template % {
                 'project': config['name'],
+                'new_theme': new_theme,
                 'version': '.'.join(version_config['version'].split('.')[:2]),
                 'release': version_config['version'],
                 'real_path': doc_source_path,
