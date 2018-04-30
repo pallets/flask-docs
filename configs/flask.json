@@ -28,14 +28,14 @@
       "type": "stable",
       "title": "Flask 1.0",
       "note": "stable",
-      "version": "1.0",
+      "version": "1.0.1",
       "repo": "https://github.com/pallets/flask@1.0-maintenance"
     },
     {
       "slug": "0.12",
       "title": "Flask 0.12",
       "note": null,
-      "version": "0.12.3",
+      "version": "0.12.4",
       "repo": "https://github.com/pallets/flask@0.12-maintenance"
     }
   ]
