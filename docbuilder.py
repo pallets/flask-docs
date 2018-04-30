@@ -198,7 +198,10 @@ def build_version(config, version_config, output_folder, checkout_folder):
     client = None
 
     try:
-        client = subprocess.Popen(['virtualenv', venv_path])
+        if new_theme:
+            client = subprocess.Popen(['python3.6', '-m', 'venv', venv_path])
+        else:
+            client = subprocess.Popen(['virtualenv', venv_path])
         client.wait()
 
         with open(os.path.join(config_path, 'conf.py'), 'w') as f:
