@@ -28,7 +28,7 @@
       "type": "stable",
       "title": "Flask 1.0",
       "note": "stable",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "repo": "https://github.com/pallets/flask@1.0-maintenance"
     },
     {
