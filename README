@@ -1,6 +1,9 @@
 Flask Documentation
 ===================
 
+No longer used. The docs are now built and hosted with Read the Docs.
+The Sphinx themes are at https://github.com/pallets/pallets-sphinx-themes.
+
 This repository contains sphinx styles for Flask and Flask related
 projects and a wrapper script to build the online documentation.
 
